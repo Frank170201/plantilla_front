@@ -1,0 +1,130 @@
+/**
+ * src/styles/settings.scss
+ *
+ * Configures SASS variables and Vuetify overwrites
+ */
+
+// https://vuetifyjs.com/features/sass-variables/`
+// @use 'vuetify/settings' with (
+//   $color-pack: false
+// );
+.w-10 {
+  width: 100%;
+}
+.w-9 {
+  width: 90%;
+}
+.w-8 {
+  width: 80%;
+}
+.w-7 {
+  width: 70%;
+}
+.w-6 {
+  width: 60%;
+}
+.w-5 {
+  width: 50%;
+}
+.w-4 {
+  width: 40%;
+}
+.w-3 {
+  width: 30%;
+}
+.w-2 {
+  width: 20%;
+}
+.w-1 {
+  width: 10%;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.gap-1-5{
+  gap: 0.375rem;
+}
+
+.gap-2-5 {
+  gap: 0.625rem;
+}
+
+.gap-3-5 {
+  gap: 0.875rem;
+}
+
+@for $i from 1 through 32 {
+  .gap-#{$i} {
+    gap: #{0.25 * $i}rem;
+  }
+}
+
+.text-for-table {
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.break-word {
+  word-break: break-word; 
+  white-space: normal;
+}
+
+.italic-font {
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'InterFontFamilyRegular';
+  src: url('@/assets/fonts/InterRegular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'InterFontFamilyBold';
+  src: url('@/assets/fonts/InterBold.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'InterFontFamilyItalic';
+  src: url('@/assets/fonts/InterItalic.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+* {
+  font-family: 'InterFontFamilyRegular', Arial, Helvetica, sans-serif !important;
+}
+
+h1, h2, h3, h4, h5, h6, .font-weight-bold, .font-weight-black {
+  font-family: 'InterFontFamilyBold', Arial, Helvetica, sans-serif !important;
+}
+
+i, em, cite, dfn, .italic-font {
+  font-family: 'InterFontFamilyItalic', Arial, Helvetica, sans-serif !important;
+}
+
+.text-decoration-none {
+  text-decoration: none;
+}
+
+.fondo-transparente {
+  background-color: transparent !important;
+}
+
+.v-card:has(.filtros-sticky),
+.v-window:has(.filtros-sticky) {
+  position: unset;
+  overflow: unset;
+}
+
+.v-dialog > .v-overlay__content > .v-card.no-padding {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
