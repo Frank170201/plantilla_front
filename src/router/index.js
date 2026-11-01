@@ -1,7 +1,6 @@
 // composables
 import { createRouter, createWebHistory } from 'vue-router'
 import { useUtils } from '@/plugins/utils'
-import authRouter from '@/views/auth/router'
 import perfilesRouter from "@/views/perfiles/router";
 import rolesRouter from "@/views/roles/router";
 import rutasRouter from "@/views/rutas/router";
@@ -13,6 +12,17 @@ const { canNavigate } = useUtils()
 const routes = [
   {
     path: '/',
+    name: 'marketCatalog',
+    component: () => import('@/views/market/MarketCatalog.vue'),
+  },
+  {
+    path: '/mi-negocio',
+    name: 'marketPanel',
+    component: () => import('@/views/market/MarketPanel.vue'),
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/institucional',
     component: () => import('@/layouts/PublicLayout.vue'),
     children: [
 
@@ -27,7 +37,6 @@ const routes = [
         name: 'dashboard',
         component: () => import(/* webpackChunkName: "home" */ '@/views/DashboardView.vue'),
       },
-      ...authRouter,
       ...perfilesRouter,
       ...rolesRouter,
       ...rutasRouter,
@@ -82,7 +91,7 @@ router.beforeEach(async (to, from, next) => {
   const origen = params.get('origin_app');
 
   if (!requiresAuth && LocalStorage.token && to.name === 'login' && !origen) {
-    return next({ name: 'dashboard' });
+    return next({ name: 'marketPanel' });
   }
 
   if (!requiresAuth) {
@@ -94,7 +103,7 @@ router.beforeEach(async (to, from, next) => {
     return next('/login');
   }
 
-  if (LocalStorage.token && !(await canNavigate(to))) {
+  if (to.name !== 'marketPanel' && LocalStorage.token && !(await canNavigate(to))) {
     LocalStorage.token = null;
     LocalStorage.refresh_token = null;
     return next('/forbidden');

@@ -16,9 +16,9 @@
           class="text-h6 font-weight-bold text-center"
           style="color: #043432"
         >
-          SICAF
+          {{ BRAND.name }}
         </h2>
-        <v-icon v-else size="32" color="#043432">mdi-package-variant-closed</v-icon>
+        <img v-else src="/brand/symbol.svg" :alt="BRAND.name" width="32" height="32" />
       </v-list-item>
     </v-list>
 
@@ -76,6 +76,7 @@
 </template>
 
 <script setup>
+import { BRAND } from "@/config/brand";
 import { useDisplay } from "vuetify";
 import { computed, ref } from "vue";
 import { useRouter } from "vue-router";

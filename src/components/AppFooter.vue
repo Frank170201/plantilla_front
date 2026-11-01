@@ -14,7 +14,7 @@
           xl="2"
           class="text-left text-md-center text-lg-left mb-md-4 mb-lg-0"
         >
-          <LogoDarkMercadosNacionales style="height: 53px" />
+          <AppBrand compact />
         </v-col>
 
         <v-col cols="12" md="4" lg="3" xl="2" class="mt-4 mt-md-0">
@@ -173,7 +173,7 @@
 import { computed } from "vue";
 import { useDisplay } from "vuetify/lib/framework.mjs";
 import { useRoute } from "vue-router";
-import LogoDarkMercadosNacionales from "./logos/LogoDarkMercadosNacionales.vue";
+import AppBrand from "./AppBrand.vue";
 
 const display = useDisplay();
 const route = useRoute();

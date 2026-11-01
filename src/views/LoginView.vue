@@ -1,218 +1,72 @@
 <template>
-  <v-app class="login-page">
-    <v-layout style="width: 100%">
-      <v-app-bar class="login-page__header" color="transparent" elevation="0">
-        <div ref="app_header" style="width: 100%">
-          <HeaderPublico />
+  <v-app class="signin-page">
+    <main class="signin-layout">
+      <aside class="welcome-panel">
+        <router-link to="/" class="signin-brand" :aria-label="`${BRAND.name}, volver al mercado`"><AppBrand /></router-link>
+        <div class="welcome-copy"><p class="eyebrow">LO NUESTRO, MÁS CERCA.</p><h2>Las mejores cosas<br> empiezan <em>cerca.</em></h2><p>Un mercado de personas, de historias<br class="desktop-break"> y de todo eso que hace especial tu día.</p></div>
+        <div class="welcome-scene" aria-hidden="true">
+          <div class="scene-sun"></div>
+          <svg viewBox="0 0 520 340" fill="none" class="basket-scene">
+            <ellipse cx="263" cy="308" rx="169" ry="14" fill="#c9cfb7" opacity=".45"/>
+            <path d="M119 179h285l-32 125H151z" fill="#bc8a53"/><path d="M130 187h263l-28 107H158z" fill="#d8ae77"/>
+            <path d="M152 203h220m-215 18h210m-205 18h199m-194 18h189m-184 18h179M176 193l16 101m18-101 10 101m23-101 3 101m25-101-3 101m30-101-11 101m38-101-17 101m43-101-23 101" stroke="#b17d46" stroke-width="2"/>
+            <path d="M169 183q12-106 91-108 83-1 102 108" stroke="#9d7449" stroke-width="13"/><path d="M169 183q12-106 91-108 83-1 102 108" stroke="#e0c399" stroke-width="5"/>
+            <path d="M170 178c-24-24-18-63 0-81 32 3 48 39 40 76" fill="#78885e"/><path d="M178 171c0-32-6-49-9-63m10 39-14-10m13-1 12-14" stroke="#b3bf91" stroke-width="2"/>
+            <path d="M200 180c-9-48 16-77 44-78 23 26 13 67-12 80" fill="#98a678"/><path d="m217 178 24-62m-16 41-11-12m17-4 13-3" stroke="#c8d0a4" stroke-width="2"/>
+            <path d="M297 180l26-117q4-17 17-14l15 4q12 3 8 18l-29 110" fill="#e3c395"/><path d="m331 78 18 11m-23 11 18 10m-23 10 17 10m-23 11 17 10" stroke="#c59b66" stroke-width="4" stroke-linecap="round"/>
+            <circle cx="260" cy="168" r="31" fill="#be6d49"/><circle cx="305" cy="170" r="28" fill="#d99756"/><circle cx="350" cy="174" r="23" fill="#b7b47f"/>
+            <path d="M260 138q-5-17 7-24m-7 26q17-13 23-3-11 8-23 3" stroke="#6f8255" stroke-width="4"/><path d="M305 140q-4-11 4-20" stroke="#6f8255" stroke-width="3"/>
+            <rect x="115" y="177" width="294" height="17" rx="7" fill="#ab7946"/><path d="M122 182h280" stroke="#e6c798" stroke-width="3" stroke-linecap="round"/>
+            <path d="M84 286v-91m0 42q-34-4-29-31 31 1 29 31zm0 17q29-7 28-30-28 0-28 30z" stroke="#8f9d70" stroke-width="3"/><path d="M71 279h27l-3 27H75z" fill="#b0b58a"/>
+            <path d="m414 98 3 8 8 3-8 3-3 8-3-8-8-3 8-3zM108 99l2 5 6 2-6 2-2 6-2-6-5-2 5-2z" fill="#bd955c"/>
+          </svg>
+          <div class="scene-note"><span class="note-icon"><v-icon size="18">mdi-hand-heart-outline</v-icon></span><span>De nuestra comunidad.<br><strong>Para tu día a día.</strong></span></div>
         </div>
-      </v-app-bar>
-
-      <v-main
-        :style="`width: 100%; max-width: 100%; margin-top: ${header_height}px;`"
-        class="pt-0 d-flex flex-column"
-      >
-        <div :style="`${pageMargins};`" class="flex-grow-1">
-          <v-row justify="center">
-            <v-col cols="12" md="8" xl="6">
-              <v-card
-                :style="`padding: ${
-                  display.mdAndUp.value ? '13.56%' : '32px 16px'
-                }; border-style: solid; border-width: 5px;`"
-                class="fondo-complementario-5 borde-nieve color-nieve"
-                rounded="xl"
-              >
-                <h2
-                  style="font-size: 38px; line-height: 100%"
-                  class="text-center text-lg-left"
-                >
-                  Iniciar sesión
-                </h2>
-
-                <v-form @submit.prevent="submit" class="mt-8">
-                  <v-text-field
-                    v-model="form.email"
-                    :error-messages="
-                      $vLogin.email.$errors.map((e) => e.$message)
-                    "
-                    :hide-details="$vLogin.email.$errors.length === 0"
-                    @blur="$vLogin.email.$touch()"
-                    append-inner-icon="mdi-account"
-                    label="Usuario / Correo Electrónico *"
-                    variant="filled"
-                    rounded="lg"
-                    bg-color="nieve"
-                  />
-
-                  <v-text-field
-                    v-model="form.password"
-                    :error-messages="
-                      $vLogin.password.$errors.map((e) => e.$message)
-                    "
-                    :hide-details="$vLogin.password.$errors.length === 0"
-                    :type="showPassword ? 'text' : 'password'"
-                    :append-inner-icon="
-                      showPassword ? 'mdi-eye' : 'mdi-eye-off'
-                    "
-                    label="Contraseña *"
-                    @click:append-inner="showPassword = !showPassword"
-                    variant="filled"
-                    rounded="lg"
-                    :class="`mt-8 ${
-                      $vLogin.password.$errors.length > 0 ? 'mb-8' : ''
-                    }`"
-                    bg-color="nieve"
-                  />
-
-                  <!-- <router-link
-                    style="font-size: 12px; font-size: 400; line-height: 100%;"
-                    class="d-inline-block mt-4 color-nieve text-decoration-none login-page__link"
-                    :to="{ name: 'solicitud-restablecimiento-contrasena' }"
-                  >
-                    ¿Olvidaste tu contraseña?
-                  </router-link> -->
-
-                  <v-btn
-                    type="submit"
-                    color="primario-2"
-                    size="large"
-                    rounded="lg"
-                    class="mt-8 font-weight-bold text-none"
-                    style="
-                      font-size: 20px;
-                      line-height: 100%;
-                      letter-spacing: 0%;
-                    "
-                    block
-                  >
-                    Iniciar sesión
-                  </v-btn>
-                  <!--
-                  <p class="mt-8 text-center color-nieve" style="font-size: 14px; font-size: 400; line-height: 100%;">
-                    ¿No tienes cuenta?
-                    <router-link
-                      :to="{ name: 'registro-comerciante' }"
-                      class="color-nieve ml-2 font-weight-bold text-decoration-none login-page__link"
-                    >
-                      Registrate aquí
-                    </router-link>
-                  </p> -->
-                </v-form>
-              </v-card>
-            </v-col>
-          </v-row>
-        </div>
-        <AppFooter class="flex-grow-0" />
-      </v-main>
-    </v-layout>
-
-    <TwoFactorAuthComponent
-      v-model="useAuth.should_confirm_2fa"
-      @sendCode="verifyCode"
-    />
+        <div class="welcome-bottom"><span class="small-line"></span><p>Tu mercado de siempre.<br>Ahora, también contigo en línea.</p></div>
+      </aside>
+      <section class="access-panel" aria-labelledby="signin-title">
+        <header class="access-header"><router-link to="/" class="back-link"><v-icon size="17">mdi-arrow-left</v-icon> Volver al mercado</router-link><span class="access-label">ACCESO A TU CUENTA</span></header>
+        <div class="form-position"><div class="form-container">
+          <div class="welcome-badge"><v-icon size="20">mdi-account-outline</v-icon></div>
+          <p class="eyebrow form-eyebrow">QUÉ GUSTO TENERTE AQUÍ</p><h1 id="signin-title">Bienvenido<br> de nuevo.</h1><p class="form-intro">Ingresa tus datos para continuar en {{ BRAND.name }}.</p>
+          <v-form class="signin-form" @submit.prevent="submit" novalidate :aria-busy="busy">
+            <label for="signin-email" class="field-label">Usuario o correo electrónico</label>
+            <v-text-field id="signin-email" v-model="form.email" name="username" autocomplete="username" autocapitalize="none" :spellcheck="false" placeholder="Tu usuario o correo" aria-label="Usuario o correo electrónico" :error-messages="$vLogin.email.$errors.map(e=>e.$message)" @blur="$vLogin.email.$touch()" prepend-inner-icon="mdi-account-outline" variant="outlined" rounded="lg" color="#234e3d" bg-color="white" :disabled="busy" class="access-input" />
+            <label for="signin-password" class="field-label">Contraseña</label>
+            <v-text-field id="signin-password" v-model="form.password" name="password" autocomplete="current-password" :type="showPassword ? 'text' : 'password'" placeholder="Ingresa tu contraseña" aria-label="Contraseña" :error-messages="$vLogin.password.$errors.map(e=>e.$message)" @blur="$vLogin.password.$touch()" prepend-inner-icon="mdi-lock-outline" variant="outlined" rounded="lg" color="#234e3d" bg-color="white" :disabled="busy" class="access-input password-input"><template #append-inner><button class="password-toggle" type="button" :aria-label="showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'" :aria-pressed="showPassword" :disabled="busy" @click="showPassword=!showPassword"><v-icon size="20">{{ showPassword ? 'mdi-eye-off-outline' : 'mdi-eye-outline' }}</v-icon></button></template></v-text-field>
+            <v-btn type="submit" block flat height="54" rounded="lg" color="#234e3d" :loading="busy" :disabled="busy" class="submit-button">Iniciar sesión <v-icon size="19" end>mdi-arrow-right</v-icon></v-btn>
+          </v-form>
+          <div class="explore-divider"><span></span><p>EL MERCADO ESTÁ ABIERTO PARA TODOS</p><span></span></div>
+          <router-link to="/" class="explore-card"><span class="explore-icon"><v-icon size="23">mdi-basket-outline</v-icon></span><span><strong>¿Solo vienes a explorar?</strong><small>Descubre productos sin iniciar sesión.</small></span><v-icon size="19" class="explore-arrow">mdi-arrow-top-right</v-icon></router-link>
+        </div></div>
+        <footer class="access-footer"><span>{{ BRAND.name }} · {{ BRAND.appName }}</span><span><v-icon size="14">mdi-store-outline</v-icon> Comercio local, conexiones reales.</span></footer>
+      </section>
+    </main>
+    <TwoFactorAuthComponent :show-dialog="useAuth.should_confirm_2fa" @sendCode="verifyCode" />
   </v-app>
 </template>
 <script setup>
-import TwoFactorAuthComponent from "@/components/TwoFactorAuthComponent.vue";
-import { useAuthStore } from "@/store/auth";
-import { computed, onBeforeUnmount, onMounted, ref } from "vue";
-import useVuelidate from "@vuelidate/core";
-import { required, helpers, minLength } from "@vuelidate/validators";
-import useNoti from "@/composables/useNoti";
-import AppFooter from "@/components/AppFooter.vue";
-import HeaderPublico from "@/layouts/components/HeaderPublico.vue";
-import { usePageMargin } from "@/composables/usePageMargin";
-import { useDisplay } from "vuetify/lib/framework.mjs";
-
-const pageMargins = usePageMargin();
-const useAuth = useAuthStore();
-const display = useDisplay();
-
-const app_header = ref(null);
-const header_height = ref(0);
-const observer = ref(null);
-
-const form = ref({
-  email: "",
-  password: "",
-});
-
-const showPassword = ref(false);
-const { notify } = useNoti();
-
-const aplicacionOrigen = computed(() => {
-  const params = new URLSearchParams(window.location.search);
-  const origen = params.get('origin_app');
-
-  return origen;
-});
-
-const rules = computed(() => {
-  return {
-    email: {
-      minLength: helpers.withMessage("El email es requerido", minLength(4)),
-      required: helpers.withMessage(
-        "El nombre de usuario es requerido",
-        required
-      ),
-    },
-    password: {
-      required: helpers.withMessage("La contraseña es requerida", required),
-    },
-  };
-});
-
-const $vLogin = useVuelidate(rules, form);
-const submit = async () => {
-  $vLogin.value.$validate();
-  if ($vLogin.value.$invalid) {
-    notify("Hay campos inválidos", "error");
-    return;
-  }
-
-  await useAuth.login(form.value.email, form.value.password, aplicacionOrigen.value);
-
-  $vLogin.value.$reset();
-};
-
-const verifyCode = async (code) => {
-  await useAuth.verifyCode(form.value.email, code);
-
-  $vLogin.value.$reset();
-};
-
-onMounted(() => {
-  observer.value = new ResizeObserver((entries) => {
-    Array.from(entries).forEach((entry) => {
-      const height = entry.contentRect.height;
-      header_height.value = height;
-    });
-  });
-
-  observer.value.observe(app_header.value);
-});
-
-onBeforeUnmount(() => {
-  observer.value?.unobserve(app_header.value);
-});
+import TwoFactorAuthComponent from '@/components/TwoFactorAuthComponent.vue';
+import { useAuthStore } from '@/store/auth';
+import AppBrand from '@/components/AppBrand.vue';
+import { BRAND } from '@/config/brand';
+import { computed, ref } from 'vue';
+import useVuelidate from '@vuelidate/core';
+import { required, helpers, minLength } from '@vuelidate/validators';
+const useAuth=useAuthStore();
+const form=ref({email:'',password:''});
+const showPassword=ref(false), submitting=ref(false);
+const busy=computed(()=>submitting.value || useAuth.pinia_is_loading);
+const aplicacionOrigen=computed(()=>new URLSearchParams(window.location.search).get('origin_app'));
+const rules=computed(()=>({email:{required:helpers.withMessage('Ingresa tu usuario o correo electrónico.',required),minLength:helpers.withMessage('Ingresa al menos 4 caracteres.',minLength(4))},password:{required:helpers.withMessage('Ingresa tu contraseña.',required)}}));
+const $vLogin=useVuelidate(rules,form);
+async function submit(){
+  if(busy.value || !(await $vLogin.value.$validate())) return;
+  submitting.value=true;
+  try{await useAuth.login(form.value.email.trim(),form.value.password,aplicacionOrigen.value);}finally{submitting.value=false;}
+}
+async function verifyCode(code){if(busy.value)return;await useAuth.verifyCode(form.value.email.trim(),code);}
 </script>
 <style scoped>
-.login-page {
-  background-image: url("../assets/img/background.jpg");
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: 0 0;
-}
-
-.login-page__header :deep(.v-toolbar__content) {
-  height: auto !important;
-}
-
-.login-page :deep(.v-messages) {
-  color: var(--nieve) !important;
-}
-
-.login-page__link:active {
-  text-decoration: underline !important;
-  color: var(--primario-2) !important;
-}
+.signin-page{--ink:#244436;--muted:#8a8e81;--line:#e4e7dc;background:#fdfcf9;color:var(--ink)}.signin-layout{display:grid;grid-template-columns:46% 54%;min-height:100svh}.welcome-panel{background:#e9eddf;position:relative;display:flex;flex-direction:column;padding:44px clamp(35px,5.2vw,90px) 28px;overflow:hidden}.signin-brand{display:flex;align-items:center;gap:12px;width:fit-content;color:var(--ink);text-decoration:none}.brand-mark{display:grid;place-items:center;width:43px;height:47px;border:1px solid #a5b393;border-radius:15px 15px 4px 4px}.brand-name{font-family:Georgia,'Times New Roman',serif!important;font-size:25px;line-height:1.1;font-weight:600}.brand-name small{display:block;font-size:8px;letter-spacing:2.8px;margin-top:8px;font-weight:400}.welcome-copy{margin-top:clamp(55px,9vh,110px);position:relative;z-index:1}.eyebrow{font-size:9px;letter-spacing:2.3px;font-weight:500;color:#788568;line-height:1.8}.welcome-copy h2{font-size:clamp(35px,3.9vw,58px);line-height:1.13;letter-spacing:-2px;font-weight:400;margin-top:20px}.welcome-copy h2,.welcome-copy h2 em{font-family:Georgia,'Times New Roman',serif!important}.welcome-copy h2 em{font-weight:400;color:#819064}.welcome-copy>p:last-child{font-size:12px;color:#7a866f;line-height:1.9;margin-top:20px}.welcome-scene{position:relative;margin:14px -35px 0;flex:1;min-height:240px;display:flex;align-items:center;justify-content:center}.scene-sun{position:absolute;width:235px;height:235px;border:1px solid #d8ddca;border-radius:50%;background:#f1f1e5;top:18px;left:50%;transform:translateX(-50%)}.scene-sun:after{content:'';position:absolute;inset:-17px;border:1px dashed #d3dac3;border-radius:50%}.basket-scene{position:relative;z-index:1;width:min(100%,440px);max-height:290px;min-height:230px}.scene-note{position:absolute;bottom:5px;right:2px;display:flex;gap:10px;align-items:center;padding:13px 16px;border:1px solid #e4e4d2;background:#f9f8ef;border-radius:7px;box-shadow:0 8px 30px #35522b0a;z-index:2;transform:rotate(-4deg);font-size:10px;color:#8d927f;line-height:1.6}.scene-note strong{font-weight:500;color:#506346}.note-icon{width:33px;height:33px;border-radius:50%;background:#edf0e1;display:grid;place-items:center;color:#85966a}.welcome-bottom{display:flex;align-items:center;gap:15px;margin-top:28px;position:relative;z-index:1}.small-line{width:30px;height:1px;background:#9baa87}.welcome-bottom p{font-size:10px;line-height:1.8;color:#8e9881}.access-panel{display:flex;flex-direction:column;padding:44px clamp(32px,4.7vw,78px) 24px;background:#fdfcf9}.access-header{display:flex;justify-content:space-between;align-items:center;gap:20px}.back-link{display:inline-flex;align-items:center;gap:8px;color:#7c8575;text-decoration:none;font-size:11px}.back-link:hover{color:#234e3d}.access-label{font-size:8px;letter-spacing:1.7px;color:#a1a694;white-space:nowrap}.form-position{flex:1;display:flex;align-items:center;justify-content:center;padding:40px 0}.form-container{width:min(100%,380px)}.welcome-badge{width:43px;height:43px;border:1px solid #e0e5d7;border-radius:13px;background:#f2f4eb;display:grid;place-items:center;color:#7a8c65;margin-bottom:24px}.form-eyebrow{font-size:8px;color:#909a80;letter-spacing:2px}.form-container h1{font-family:Georgia,'Times New Roman',serif!important;font-size:48px;font-weight:400;line-height:1.07;letter-spacing:-1.7px;margin-top:14px}.form-intro{font-size:11px;color:#8b9084;line-height:1.9;margin-top:16px}.signin-form{margin-top:31px}.field-label{display:block;font-size:11px;color:#53634d;margin-bottom:10px;font-weight:500}.access-input{font-size:12px}.access-input :deep(.v-field__input){font-size:12px;min-height:52px;padding-top:15px;padding-bottom:15px}.access-input :deep(.v-field__prepend-inner){padding-top:16px;color:#a0aa94}.access-input :deep(.v-field__prepend-inner>.v-icon){font-size:19px}.access-input :deep(.v-field__outline){color:#cbd3c0;--v-field-border-opacity:1}.access-input :deep(.v-input__details){padding-inline:0;min-height:26px;padding-top:5px}.access-input :deep(.v-messages){font-size:10px;line-height:1.5}.access-input :deep(.v-field--error .v-field__outline){color:#aa5244}.password-input :deep(.v-field__append-inner){padding-top:13px}.password-toggle{display:grid;place-items:center;width:27px;height:27px;border-radius:4px;color:#919b85;cursor:pointer}.password-toggle:hover{background:#eff2e8;color:#234e3d}.submit-button{margin-top:5px;font-size:12px!important;letter-spacing:0!important;text-transform:none!important}.submit-button :deep(.v-btn__content){width:100%;justify-content:space-between;padding-inline:4px}.explore-divider{display:flex;align-items:center;gap:11px;margin:30px 0 21px}.explore-divider>span{flex:1;height:1px;background:#e5e8de}.explore-divider>p{font-size:7px;letter-spacing:1px;color:#a0a793;text-align:center;white-space:nowrap}.explore-card{display:flex;align-items:center;gap:13px;border:1px solid #e2e6d9;border-radius:8px;padding:15px 16px;color:#536849;text-decoration:none;transition:background .15s,border-color .15s}.explore-card:hover{background:#f0f3e9;border-color:#b3c09f}.explore-icon{color:#8a9a73;display:grid;place-items:center;width:34px;height:34px;background:#f0f3e9;border-radius:9px;flex-shrink:0}.explore-card strong{font-size:11px;font-weight:500;display:block}.explore-card small{display:block;margin-top:5px;font-size:9px;color:#969c8b}.explore-arrow{margin-left:auto;color:#a3ad94}.access-footer{display:flex;align-items:center;justify-content:space-between;gap:15px;color:#a4ac98;font-size:8px}.access-footer>span:last-child{display:flex;align-items:center;gap:5px}.signin-page :is(a,button):focus-visible{outline:3px solid #b68a53;outline-offset:5px}.signin-page input:-webkit-autofill{-webkit-text-fill-color:#244436}.signin-page :deep(.v-field__input:-webkit-autofill){-webkit-box-shadow:0 0 0 100px white inset}.signin-page :deep(.v-input--error .v-messages){color:#a24e42}@media(min-width:1600px){.welcome-panel{padding-left:8vw;padding-right:5vw}.welcome-copy h2{font-size:66px}.form-container{width:420px}.form-container h1{font-size:54px}.form-intro{font-size:13px}.form-position{padding-block:60px}.field-label{font-size:12px}.welcome-copy>p:last-child{font-size:14px}.basket-scene{width:480px;max-height:340px}.welcome-scene{min-height:300px}.scene-sun{width:280px;height:280px}.scene-note{right:15px;bottom:22px;font-size:12px}.access-footer{font-size:10px}.welcome-bottom p{font-size:12px}}@media(max-width:1050px){.signin-layout{grid-template-columns:43% 57%}.welcome-panel{padding:32px 30px 24px}.access-panel{padding:32px 35px 24px}.brand-name{font-size:23px}.welcome-copy h2{font-size:39px}.welcome-copy{margin-top:70px}.welcome-scene{margin-inline:-25px;min-height:240px}.scene-sun{width:195px;height:195px;top:28px}.basket-scene{min-height:220px}.scene-note{right:0;bottom:0;font-size:9px;padding:10px}.access-label{display:none}.form-position{padding-block:40px}.form-container h1{font-size:44px}.access-footer>span:last-child{max-width:140px;font-size:8px}.form-container{max-width:365px}.desktop-break{display:none}}@media(max-width:700px){.signin-layout{grid-template-columns:1fr;min-height:100svh}.welcome-panel{padding:23px 25px 27px;min-height:0}.signin-brand{gap:10px}.brand-name{font-size:22px}.brand-mark{width:36px;height:40px}.brand-name small{font-size:7px;letter-spacing:2px}.welcome-copy{margin-top:28px;max-width:65%}.welcome-copy>.eyebrow{font-size:7px;letter-spacing:1.6px}.welcome-copy h2{font-size:32px;letter-spacing:-1px;margin-top:10px}.welcome-copy h2 br{display:none}.welcome-copy>p:last-child{font-size:10px;line-height:1.7;margin-top:13px;max-width:230px}.welcome-bottom{display:none}.welcome-scene{position:absolute;right:-52px;bottom:12px;width:210px;height:175px;min-height:0;margin:0;transform:rotate(-6deg);opacity:.85;pointer-events:none}.basket-scene{width:210px;min-height:150px;height:150px}.scene-sun{width:125px;height:125px;top:30px}.scene-note{display:none}.access-panel{padding:22px 25px 20px}.access-header{justify-content:space-between}.back-link{font-size:10px}.access-label{display:block;font-size:7px;letter-spacing:1px}.form-position{padding:30px 0 35px}.form-container{max-width:420px}.welcome-badge{display:none}.form-eyebrow{font-size:7px}.form-container h1{font-size:40px;letter-spacing:-1.2px;margin-top:11px}.form-container h1 br{display:none}.form-intro{margin-top:12px;font-size:11px}.signin-form{margin-top:26px}.field-label{font-size:11px}.explore-divider{margin-top:26px}.explore-card small{font-size:9px}.access-footer{padding-top:18px;border-top:1px solid #e8ebdf;font-size:8px}.access-footer>span:last-child{max-width:none;font-size:8px}}@media(max-width:360px){.welcome-panel{padding-inline:20px}.welcome-copy h2{font-size:29px}.welcome-scene{right:-65px;opacity:.65}.access-panel{padding-inline:20px}.form-container h1{font-size:35px}.explore-divider>p{font-size:6px;letter-spacing:.7px}.access-footer>span:last-child{display:none}.access-label{font-size:6px}.explore-card{padding-inline:12px;gap:9px}}@media(prefers-reduced-motion:reduce){.signin-page *{transition:none!important}}
 </style>

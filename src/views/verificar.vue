@@ -3,7 +3,7 @@ import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { useDisplay } from "vuetify";
 import { useAuthStore } from "@/store/auth";
-import logoSimple from "@/assets/img/SIAM-LOGO-TRANSPARENTE.svg";
+const logoSimple = "/brand/logo.svg";
 import LogoComponent from "@/components/LogoComponent.vue";
 import router from "@/router";
 const useAuth = useAuthStore();

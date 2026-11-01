@@ -3,7 +3,7 @@
 </template>
 <script setup>
 // import logoBlanco from '@/assets/img/logo-dinac-fondo-blanco.png'
-import logoBlanco from '@/assets/img/SIAM-LOGO-TRANSPARENTE.svg'
+const logoBlanco = '/brand/logo.svg'
 
 defineProps({
   src: {

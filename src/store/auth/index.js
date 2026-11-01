@@ -36,7 +36,7 @@ const redireccionarInternamente = ({ token, refreshToken }, callback) => {
 
   callback?.(informacionUsuario);
 
-  router.push({ name: 'dashboard' });
+  router.push({ name: 'marketPanel' });
 }
 
 const redireccionarExternamente = ({ token, redirectTo }) => {
