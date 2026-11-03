@@ -36,7 +36,7 @@ const redireccionarInternamente = ({ token, refreshToken }, callback) => {
 
   callback?.(informacionUsuario);
 
-  router.push({ name: 'marketPanel' });
+  router.push({ name: 'accessLanding' });
 }
 
 const redireccionarExternamente = ({ token, redirectTo }) => {
@@ -130,7 +130,7 @@ export const useAuthStore = defineStore("auth", {
         // CloseDialog2FA
         this.should_confirm_2fa = false;
 
-        router.push({ name: 'dashboard' });
+        router.push({ name: 'accessLanding' });
         return true;
       } catch (error) {
         //
@@ -171,7 +171,7 @@ export const useAuthStore = defineStore("auth", {
           is_admin: roles.includes("ROLE_ADMIN"),
         };
         router.push({
-          name: 'dashboard'
+          name: 'accessLanding'
         });
       } catch (error) {
         // window.location = '/login'

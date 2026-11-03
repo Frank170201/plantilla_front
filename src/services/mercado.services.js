@@ -8,6 +8,15 @@ api.interceptors.request.use((config) => {
   return config;
 });
 export default {
+  logout: () => api.post('/logout'),
+  access: () => api.get('/mercado/acceso'),
+  adminSummary: () => api.get('/mercado/admin/resumen'),
+  adminCommerces: () => api.get('/mercado/admin/comercios'),
+  adminUsers: () => api.get('/mercado/admin/usuarios'),
+  adminProducts: (commerce) => api.get('/mercado/admin/productos', {params:{commerce_id:commerce || undefined}}),
+  adminCreateCommerce: (body) => api.post('/mercado/admin/comercios',body),
+  adminUpdateCommerce: (id,body) => api.put(`/mercado/admin/comercios/${id}`,body),
+  adminCreateUser: (body) => api.post('/mercado/admin/usuarios',body),
   commerces: () => api.get('/mercado/comercios'),
   createCommerce: (body) => api.post('/mercado/comercios', body),
   products: (commerce) => api.get(`/mercado/comercios/${commerce}/productos`),

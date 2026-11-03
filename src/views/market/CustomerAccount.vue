@@ -1,0 +1,10 @@
+<template><v-app class="customer-account"><header><router-link to="/"><AppBrand compact /></router-link><v-btn variant="text" @click="logout">Cerrar sesión</v-btn></header><main><p class="eyebrow">TU ESPACIO EN {{ BRAND.name.toUpperCase() }}</p><h1>Bienvenido a tu comunidad.</h1><p class="intro">Desde aquí podrás acceder a tu cuenta y volver al mercado.</p><section><v-icon size="38" color="#748265">mdi-basket-outline</v-icon><h2>Descubre el comercio local.</h2><p>Explora los productos y conoce los puestos de San Miguelito.</p><v-btn to="/" color="#234e3d" flat rounded="lg">Explorar el catálogo <v-icon end>mdi-arrow-right</v-icon></v-btn></section><p class="note">Los pedidos, las reservas y las direcciones se habilitarán en las siguientes etapas.</p></main></v-app></template>
+<script setup>
+import AppBrand from '@/components/AppBrand.vue';
+import {BRAND} from '@/config/brand';
+import {useRouter} from 'vue-router';
+import api from '@/services/mercado.services';
+const router=useRouter();
+async function logout(){try{await api.logout();}catch{}finally{localStorage.removeItem('token');localStorage.removeItem('refresh_token');router.replace('/login');}}
+</script>
+<style scoped>.customer-account{background:#faf9f4;color:#234e3d}.customer-account header{padding:25px 5%;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #e0e5d5}.customer-account a{text-decoration:none}.customer-account main{width:min(850px,90%);margin:65px auto}.eyebrow{font-size:9px;letter-spacing:2px;color:#8b9a76}h1{font-family:Georgia,serif!important;font-size:40px;font-weight:400;margin:15px 0}.intro,.note{font-size:12px;color:#8c9782;line-height:1.8}section{padding:40px;background:#eff2e6;border:1px solid #dce4cf;border-radius:12px;margin-top:35px}h2{font-family:Georgia,serif!important;font-size:30px;font-weight:400;margin:20px 0}section p{font-size:12px;color:#7e8f6c;margin-bottom:25px}.note{margin-top:25px;font-size:10px}@media(max-width:600px){h1{font-size:32px}.customer-account main{margin-top:35px}section{padding:28px}.customer-account header{gap:10px}.customer-account header .v-btn{font-size:10px}}</style>

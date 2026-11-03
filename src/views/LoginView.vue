@@ -29,7 +29,7 @@
         <div class="form-position"><div class="form-container">
           <div class="welcome-badge"><v-icon size="20">mdi-account-outline</v-icon></div>
           <p class="eyebrow form-eyebrow">QUÉ GUSTO TENERTE AQUÍ</p><h1 id="signin-title">Bienvenido<br> de nuevo.</h1><p class="form-intro">Ingresa tus datos para continuar en {{ BRAND.name }}.</p>
-          <v-form class="signin-form" @submit.prevent="submit" novalidate :aria-busy="busy">
+          <v-alert v-if="accessError" type="warning" variant="tonal" class="mt-5" density="compact">No pudimos verificar tu acceso. Comprueba que el servidor esté disponible e intenta ingresar de nuevo.</v-alert><v-form class="signin-form" @submit.prevent="submit" novalidate :aria-busy="busy">
             <label for="signin-email" class="field-label">Usuario o correo electrónico</label>
             <v-text-field id="signin-email" v-model="form.email" name="username" autocomplete="username" autocapitalize="none" :spellcheck="false" placeholder="Tu usuario o correo" aria-label="Usuario o correo electrónico" :error-messages="$vLogin.email.$errors.map(e=>e.$message)" @blur="$vLogin.email.$touch()" prepend-inner-icon="mdi-account-outline" variant="outlined" rounded="lg" color="#234e3d" bg-color="white" :disabled="busy" class="access-input" />
             <label for="signin-password" class="field-label">Contraseña</label>
@@ -54,6 +54,7 @@ import { computed, ref } from 'vue';
 import useVuelidate from '@vuelidate/core';
 import { required, helpers, minLength } from '@vuelidate/validators';
 const useAuth=useAuthStore();
+const accessError=new URLSearchParams(window.location.search).has('access_error');
 const form=ref({email:'',password:''});
 const showPassword=ref(false), submitting=ref(false);
 const busy=computed(()=>submitting.value || useAuth.pinia_is_loading);

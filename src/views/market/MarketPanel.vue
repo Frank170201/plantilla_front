@@ -1,6 +1,6 @@
 <template>
   <v-app class="market-app">
-    <v-app-bar flat color="#164c3d"><v-app-bar-title>{{ BRAND.name }} · Mi negocio</v-app-bar-title><v-btn to="/">Ver catálogo</v-btn><v-btn to="/dashboard">Mi cuenta</v-btn></v-app-bar>
+    <v-app-bar flat color="#faf9f4" class="merchant-header"><v-app-bar-title><AppBrand compact /></v-app-bar-title><v-btn to="/" variant="text">Ver catálogo <v-icon end size="16">mdi-arrow-top-right</v-icon></v-btn><v-btn variant="text" @click="logout" aria-label="Cerrar sesión"><v-icon size="20">mdi-logout</v-icon></v-btn></v-app-bar>
     <v-main><v-container style="max-width:1200px" class="py-8">
       <p class="text-overline text-teal-darken-3">ADMINISTRACIÓN DEL PUESTO</p>
       <h1 class="text-h4 mb-2">Tu negocio, al día</h1><p class="mb-6">Administra tus productos y registra cada entrada o salida de inventario.</p>
@@ -12,7 +12,7 @@
         <v-btn variant="outlined" :disabled="saving" @click="commerceDialog = true">Registrar comercio</v-btn>
         <v-btn color="teal-darken-3" :disabled="!commerceId || loading || saving" @click="openProduct()">Agregar producto</v-btn>
       </div>
-      <v-alert v-if="!loading && !commerces.length" type="info" variant="tonal">Registra tu comercio para comenzar. Cada cuenta administra sus propios puestos.</v-alert>
+      <section v-if="!loading && !commerces.length" class="merchant-empty"><span><v-icon size="35">mdi-storefront-outline</v-icon></span><h2>Tu negocio merece su propio espacio.</h2><p>Registra tu comercio para publicar productos y llevar el control del inventario.</p><v-btn color="#234e3d" flat rounded="lg" @click="commerceDialog=true">Registrar mi comercio <v-icon end>mdi-plus</v-icon></v-btn></section>
       <v-row v-if="commerceId" class="mb-4">
         <v-col cols="12" sm="4"><v-card rounded="lg" variant="tonal" color="teal"><v-card-text><div>Productos</div><strong class="text-h4">{{ products.length }}</strong></v-card-text></v-card></v-col>
         <v-col cols="12" sm="4"><v-card rounded="lg" variant="tonal" color="teal"><v-card-text><div>Publicados en el catálogo</div><strong class="text-h4">{{ products.filter(p => p.active).length }}</strong></v-card-text></v-card></v-col>
@@ -40,6 +40,10 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import api from '@/services/mercado.services';
+import AppBrand from '@/components/AppBrand.vue';
+import {useRouter} from 'vue-router';
+const router=useRouter();
+async function logout(){try{await api.logout();}catch{}finally{localStorage.removeItem('token');localStorage.removeItem('refresh_token');router.replace('/login');}}
 import { BRAND } from '@/config/brand';
 const commerces = ref([]), products = ref([]), commerceId = ref(null), loading = ref(false), saving = ref(false), error = ref(''), success = ref(''), search = ref(''), dialogError = ref(false);
 const commerceDialog = ref(false), productDialog = ref(false), movementDialog = ref(false), historyDialog = ref(false);
@@ -71,4 +75,4 @@ async function saveMovement() {
 async function showHistory(p) { try { const {data} = await api.history(commerceId.value,p.id); selected.value=p; history.value=data; historyDialog.value=true; } catch(e) { report(e); } }
 onMounted(async () => { loading.value=true; try { commerces.value=(await api.commerces()).data; commerceId.value=commerces.value[0]?.id || null; await loadProducts(); } catch(e) { report(e); } finally { loading.value=false; } });
 </script>
-<style scoped>.market-app { background:#f5f7f3; color:#183d32; }</style>
+<style scoped>.market-app{background:#faf9f4;color:#234637}.merchant-header{border-bottom:1px solid #e1e6d8}.merchant-header .v-btn{font-size:10px;letter-spacing:0;text-transform:none}.market-app h1{font-family:Georgia,serif!important;font-weight:400;letter-spacing:-1px!important;font-size:40px!important;line-height:1.2!important}.market-app .text-overline{font-size:9px!important;letter-spacing:2px!important;color:#91a077!important}.market-app h1+p{font-size:12px;color:#8b987d}.merchant-empty{padding:65px 25px;text-align:center;border:1px dashed #d7dfca;border-radius:12px;background:#f0f3e8;margin-top:30px}.merchant-empty>span{display:grid;place-items:center;width:75px;height:75px;border-radius:50%;background:#e5ebd9;color:#8a9e6c;margin:0 auto 25px}.merchant-empty h2{font-family:Georgia,serif!important;font-size:30px;font-weight:400}.merchant-empty p{font-size:12px;color:#8c9a7c;line-height:1.8;margin:16px auto 24px}.merchant-empty .v-btn{font-size:11px;letter-spacing:0;text-transform:none}.market-app :deep(.v-table){border:1px solid #e1e6d8!important;border-radius:10px}.market-app :deep(.v-table th){font-size:10px!important;color:#8c9c78;background:#f2f5eb}.market-app :deep(.v-table td){font-size:12px!important}.market-app :deep(.v-container){padding-top:45px!important}.market-app :deep(.v-field){font-size:12px}.market-app :deep(.v-btn){text-transform:none;letter-spacing:0}@media(max-width:600px){.market-app h1{font-size:33px!important}.merchant-empty{padding:40px 20px}.merchant-empty h2{font-size:25px}.merchant-header :deep(.v-toolbar-title){margin-left:15px}.merchant-header .v-btn{min-width:35px;padding-inline:8px}}</style>
